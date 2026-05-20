@@ -123,7 +123,11 @@ pub struct CheckArgs {
     #[arg(long, hide = true, conflicts_with = "respect_ignore")]
     pub no_respect_ignore: bool,
 
-    #[arg(long, help = "Apply auto-fixes where possible", overrides_with = "no_fix")]
+    #[arg(
+        long,
+        help = "Apply auto-fixes where possible",
+        overrides_with = "no_fix"
+    )]
     pub fix: bool,
 
     #[arg(long, hide = true, overrides_with = "fix")]
