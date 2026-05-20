@@ -337,9 +337,9 @@ impl FormatterState {
                     }
                 }
             }
-            TagEnd::Item => {
+            TagEnd::Item
                 // Tight list item: the content was never wrapped in Paragraph.
-                if self.in_tight_item {
+                if self.in_tight_item => {
                     let text = std::mem::take(&mut self.inline);
                     if !text.is_empty() {
                         let prefix = "  ".repeat(self.list_depth);
@@ -347,7 +347,6 @@ impl FormatterState {
                     }
                     self.in_tight_item = false;
                 }
-            }
             TagEnd::Emphasis => self.inline.push('*'),
             TagEnd::Strong => self.inline.push_str("**"),
             TagEnd::Strikethrough => self.inline.push_str("~~"),
