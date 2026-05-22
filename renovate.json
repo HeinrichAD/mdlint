@@ -3,10 +3,11 @@
   "extends": [
     "config:recommended"
   ],
+  "timezone": "America/Los_Angeles",
   "schedule": ["on wednesday"],
+  "rebaseWhen": "conflicts-only",
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["on wednesday"],
     "groupName": "all dependencies"
   },
   "customManagers": [
