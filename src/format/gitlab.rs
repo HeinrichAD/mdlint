@@ -1,9 +1,9 @@
-use crate::{format::Formatter};
+use crate::format::Formatter;
 use crate::lint::LintResult;
 use crate::types::FileResult;
 use hex::ToHex;
 use serde::Serialize;
-use sha2::{Sha256, Digest};
+use sha2::{Digest, Sha256};
 use std::env;
 use std::path::PathBuf;
 
@@ -18,7 +18,8 @@ impl GitlabFormatter {
 }
 
 fn file_violations(file_result: &FileResult, path_relative: &str) -> Vec<GitlabViolation> {
-    file_result.violations
+    file_result
+        .violations
         .iter()
         .map(|violation| {
             let key = format!("{}:{}", path_relative, violation.line);
@@ -85,7 +86,8 @@ struct GitlabLines {
 impl Formatter for GitlabFormatter {
     fn format(&self, result: &LintResult) -> String {
         let current_dir = env::current_dir().unwrap_or_else(|_| PathBuf::from(""));
-        let violations: Vec<GitlabViolation> = result.file_results
+        let violations: Vec<GitlabViolation> = result
+            .file_results
             .iter()
             .flat_map(|file_result| {
                 let path_relative = file_result
