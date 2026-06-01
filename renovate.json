@@ -4,11 +4,13 @@
     "config:recommended"
   ],
   "timezone": "America/Los_Angeles",
-  "schedule": ["on wednesday"],
+  "schedule": ["on monday"],
   "rebaseWhen": "conflicts-only",
+  "separateMajorMinor": false,
+  "ignoredLockFiles": ["mise.lock"],
   "lockFileMaintenance": {
     "enabled": true,
-    "groupName": "all dependencies"
+    "schedule": ["on monday"]
   },
   "customManagers": [
     {
