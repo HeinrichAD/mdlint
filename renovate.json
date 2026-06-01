@@ -11,18 +11,6 @@
     "enabled": true,
     "schedule": ["on monday"]
   },
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/^rust-toolchain\\.toml$/"
-      ],
-      "matchStrings": ["channel = \"(?<currentValue>[^\"]+)\""],
-      "depNameTemplate": "rust",
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "rust-lang/rust"
-    }
-  ],
   "packageRules": [
     {
       "matchManagers": ["cargo"],
