@@ -7,7 +7,6 @@
   "schedule": ["on monday"],
   "rebaseWhen": "conflicts-only",
   "separateMajorMinor": false,
-  "ignoredLockFiles": ["mise.lock"],
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["on monday"]
