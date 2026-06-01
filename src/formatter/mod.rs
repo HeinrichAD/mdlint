@@ -676,6 +676,10 @@ fn escape_line(line: &str) -> String {
 /// paragraph, so other ordered-list markers (2., 6., etc.) must NOT be
 /// escaped — escaping them hides real formatting problems from the linter.
 fn needs_line_escape(line: &str, is_continuation: bool) -> bool {
+    // finish() strips trailing Unicode whitespace via trim_end() from each output
+    // line. Check against that trimmed form so structural patterns hidden behind
+    // trailing Unicode whitespace (e.g. "*\u{85}\u{b}" → "*") are still caught.
+    let line = line.trim_end();
     if line.is_empty() {
         return false;
     }
@@ -1146,6 +1150,16 @@ mod tests {
         let once = format("<?>\r\\");
         let twice = format(&once);
         assert_eq!(once, twice, "idempotency: HTML block with CR content");
+    }
+
+    #[test]
+    fn test_list_marker_with_trailing_unicode_whitespace_idempotent() {
+        // "*\u{85}\u{b}" is paragraph text (NEL and VT are not CommonMark line
+        // endings, so `*` has no space after it and is not a list item). But
+        // finish() strips trailing Unicode whitespace via trim_end(), leaving
+        // bare "*\n" which re-parses as an empty list item on the next pass.
+        // The fix: needs_line_escape checks against the trimmed form of the line.
+        assert_formats_to("*\u{85}\u{b}", "\\*\n");
     }
 
     #[test]
