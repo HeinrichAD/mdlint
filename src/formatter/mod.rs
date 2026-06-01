@@ -109,13 +109,7 @@ impl FormatterState {
             Event::Text(t) => self.on_text(&t),
             Event::Code(c) => self.emit_inline_code(&c),
             Event::Html(h) => {
-                self.emit_blank_if_needed();
                 self.out.push_str(&h);
-                // HTML blocks may or may not end with \n; normalise.
-                if !self.out.ends_with('\n') {
-                    self.out.push('\n');
-                }
-                self.needs_blank = true;
             }
             Event::InlineHtml(h) => {
                 self.inline.push_str(&h);
@@ -165,7 +159,7 @@ impl FormatterState {
             Tag::CodeBlock(kind) => {
                 self.emit_blank_if_needed();
                 let lang = match kind {
-                    CodeBlockKind::Fenced(lang) => lang.into_string(),
+                    CodeBlockKind::Fenced(lang) => lang.into_string().replace('\\', "\\\\"),
                     CodeBlockKind::Indented => String::new(),
                 };
                 let fence_indent = self.list_continuation_prefix();
@@ -208,6 +202,12 @@ impl FormatterState {
                         let text = std::mem::take(&mut self.inline);
                         let prefix = "  ".repeat(self.list_depth);
                         self.flush_inline_text(&text, &prefix);
+                        self.in_tight_item = false;
+                    } else if self.in_tight_item {
+                        // Outer tight item has no inline content before this nested list.
+                        // Terminate the outer marker with a newline so inner markers are
+                        // on their own lines, preventing markers from merging on re-parse.
+                        self.out.push('\n');
                         self.in_tight_item = false;
                     }
                 }
@@ -253,6 +253,9 @@ impl FormatterState {
                 self.link_stack
                     .push((dest_url.into_string(), title.into_string()));
                 self.inline.push_str("![");
+            }
+            Tag::HtmlBlock => {
+                self.emit_blank_if_needed();
             }
             Tag::BlockQuote(_) => {
                 self.emit_blank_if_needed();
@@ -345,7 +348,10 @@ impl FormatterState {
                 // Tight list item: the content was never wrapped in Paragraph.
                 if self.in_tight_item => {
                     let text = std::mem::take(&mut self.inline);
-                    if !text.is_empty() {
+                    if text.is_empty() {
+                        // Empty tight item: the marker was already written; just terminate the line.
+                        self.out.push('\n');
+                    } else {
                         let prefix = "  ".repeat(self.list_depth);
                         self.flush_inline_text(&text, &prefix);
                     }
@@ -371,6 +377,12 @@ impl FormatterState {
                         self.inline.push_str(&format!("]({} \"{}\")", dest, title));
                     }
                 }
+            }
+            TagEnd::HtmlBlock => {
+                if !self.out.ends_with('\n') {
+                    self.out.push('\n');
+                }
+                self.needs_blank = true;
             }
             TagEnd::BlockQuote(_) => {
                 self.bq_depth -= 1;
@@ -1111,5 +1123,42 @@ mod tests {
         let once = format("\\`\r`");
         let twice = format(&once);
         assert_eq!(once, twice, "idempotency: lone backticks in text");
+    }
+
+    #[test]
+    fn test_empty_list_items_idempotent() {
+        // Two consecutive empty tight items (from "*\r*\t" = two asterisk markers
+        // with no content): the old code omitted the newline after each empty item's
+        // marker, causing the markers to merge onto one line ("- -") which re-parsed
+        // as a nested list on the next pass.
+        let once = format("*\r*\t");
+        let twice = format(&once);
+        assert_eq!(once, twice, "idempotency: empty tight list items");
+    }
+
+    #[test]
+    fn test_html_block_with_cr_content_idempotent() {
+        // pulldown-cmark splits "<?>\r\" into two Html events within the same
+        // HtmlBlock: Html("<?>") and Html("\").  The old Html handler set
+        // needs_blank = true after the first event, inserting a spurious blank
+        // line before the second, so the second format pass saw "\" as a
+        // separate paragraph and escaped it to "\\".
+        let once = format("<?>\r\\");
+        let twice = format(&once);
+        assert_eq!(once, twice, "idempotency: HTML block with CR content");
+    }
+
+    #[test]
+    fn test_code_fence_info_backslash_idempotent() {
+        // pulldown-cmark returns the unescaped info string for fenced code blocks.
+        // Emitting it verbatim means "\!" round-trips to "!" (pulldown-cmark
+        // treats "\!" as a backslash escape of "!" on the next parse).
+        // The fix escapes "\" to "\\" in the info string so the round-trip is stable.
+        let once = format("```\\\r!");
+        let twice = format(&once);
+        assert_eq!(
+            once, twice,
+            "idempotency: code fence info string with backslash"
+        );
     }
 }

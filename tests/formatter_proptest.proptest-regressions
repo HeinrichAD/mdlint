@@ -23,3 +23,6 @@ cc 40b35fcc1faf7bfbe056396cd07d37e9fef4a0a149632a7f91b27aa08a47cada # shrinks to
 cc 835d31507193ad778942d9da1cdf34e2d1cca574f5ac0ddbfee6e3c141d54a55 # shrinks to s = "#\u{b}¡\r\\"
 cc 8baa272ca6a936f049337c1343c9b8a19c10f439f7648b66eab4ee2c796cd85c # shrinks to s = ">\t\t\0"
 cc 065bb89879d4971904fb5248e9e3d6ff1daefd47427244c548235428a9808f42 # shrinks to s = "\\\r\u{b}"
+cc 155187551871b0e1b662631f566d8c4ba1ca4423862d302a34d5e6f4f9cda2b4 # shrinks to s = "```\\\r!"
+cc e526d46b85d0799cb1838776bd715b9e7f5482d45b2cc0708b6d4d1ccdd362ec # shrinks to s = "<?>\r\\"
+cc 36960a1dca71a3c5dae27a2e702ea3eeb5933ada52344acf067a76c467d6c5a8 # shrinks to s = "*\r*\t"
