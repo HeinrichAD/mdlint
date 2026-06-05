@@ -4,30 +4,23 @@
     "config:recommended"
   ],
   "timezone": "America/Los_Angeles",
-  "schedule": ["on wednesday"],
+  "schedule": ["on monday"],
   "rebaseWhen": "conflicts-only",
+  "separateMajorMinor": false,
   "lockFileMaintenance": {
     "enabled": true,
-    "groupName": "all dependencies"
+    "schedule": ["on monday"]
   },
-  "customManagers": [
-    {
-      "customType": "regex",
-      "fileMatch": ["^rust-toolchain\\.toml$"],
-      "matchStrings": ["channel = \"(?<currentValue>[^\"]+)\""],
-      "depNameTemplate": "rust",
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "rust-lang/rust"
-    }
-  ],
   "packageRules": [
     {
       "matchManagers": ["cargo"],
       "rangeStrategy": "bump"
     },
     {
-      "matchPackagePatterns": ["*"],
-      "groupName": "all dependencies"
+      "groupName": "all dependencies",
+      "matchPackageNames": [
+        "*"
+      ]
     }
   ]
 }
