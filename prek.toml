@@ -35,6 +35,14 @@ files = "^Dockerfile$"
 priority = 3
 
 [[repos.hooks]]
+id = "shellcheck"
+name = "check shell scripts"
+entry = "shellcheck"
+language = "system"
+types = ["shell"]
+priority = 3
+
+[[repos.hooks]]
 id = "tombi-check"
 name = "check toml"
 entry = "tombi check"

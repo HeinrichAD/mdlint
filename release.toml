@@ -5,32 +5,14 @@
 # commands are needed in CI — by the time a tag is pushed, every manifest already
 # contains the correct version.
 
+pre-release-commit-message = "Release"
 publish = false
+tag-message = "Release"
+# designed to run _after_ pre-release-replacements
+pre-release-hook = ["./release.sh"]
 
-# Main npm package version
-[[pre-release-replacements]]
-file = "npm/package.json"
-search = '"version": "[^"]*"'
-replace = '"version": "{{version}}"'
-
-# Python package version
-[[pre-release-replacements]]
-file = "python/pyproject.toml"
-search = 'version = "[^"]*"'
-replace = 'version = "{{version}}"'
-
-# pre-commit hook revision in all READMEs
+# pre-commit hook revision in READMEs
 [[pre-release-replacements]]
 file = "README.md"
-search = 'rev: v[0-9]+\.[0-9]+\.[0-9]+'
-replace = "rev: v{{version}}"
-
-[[pre-release-replacements]]
-file = "npm/README.md"
-search = 'rev: v[0-9]+\.[0-9]+\.[0-9]+'
-replace = "rev: v{{version}}"
-
-[[pre-release-replacements]]
-file = "python/README.md"
-search = 'rev: v[0-9]+\.[0-9]+\.[0-9]+'
+search = 'rev: v[0-9]+\.[0-9]+\.[0-9]+\s'
 replace = "rev: v{{version}}"
