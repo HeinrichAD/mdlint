@@ -1,6 +1,7 @@
 # mdlint
 
 [![CI](https://github.com/swanysimon/mdlint/workflows/CI/badge.svg)](https://github.com/swanysimon/mdlint/actions/workflows/ci.yml?query=branch%3Amain)
+
 [![Crates.io](https://img.shields.io/crates/v/markdownlint-rs.svg)](https://crates.io/crates/markdownlint-rs)
 [![NPM](https://img.shields.io/npm/v/markdownlint-rs.svg)](https://www.npmjs.com/package/markdownlint-rs)
 [![PyPi](https://img.shields.io/pypi/v/markdownlint-rs.svg)](https://pypi.org/project/markdownlint-rs)
@@ -18,7 +19,7 @@ Run `mdlint format` and stop thinking about it.
 
 - **Formatter first**: `mdlint format` rewrites files to a canonical style — no configuration required
 - **Linter second**: `mdlint check` reports violations; most are auto-fixable by the formatter
-- **Fast**: written in Rust for performance
+- **Fast**: written in Rust for performance and memes
 - **Portable**: single, small, 0-dependency binary (Linux x86_64/ARM64, macOS Intel/Apple Silicon, Windows)
 - **Git-aware**: respects `.gitignore` files by default
 
