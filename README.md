@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/swanysimon/mdlint/workflows/CI/badge.svg)](https://github.com/swanysimon/mdlint/actions/workflows/ci.yml?query=branch%3Amain)
 [![Crates.io](https://img.shields.io/crates/v/markdownlint-rs.svg)](https://crates.io/crates/markdownlint-rs)
+[![NPM](https://img.shields.io/npm/v/markdownlint-rs.svg)](https://www.npmjs.com/package/markdownlint-rs)
+[![PyPi](https://img.shields.io/pypi/v/markdownlint-rs.svg)](https://pypi.org/project/markdownlint-rs)
 
 An opinionated Markdown formatter and linter, written in Rust.
 
@@ -10,7 +12,7 @@ What [ruff](https://github.com/astral-sh/ruff/) did for Python and [gofmt](https
 stay meaningful. As AI coding agents increasingly read and write Markdown, well-structured files matter more than ever.
 Run `mdlint format` and stop thinking about it.
 
-**Project Status**: Active development, in between my day job.
+**Project Status**: Active development, but no one's top priority.
 
 ## Features
 
