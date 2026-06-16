@@ -11,20 +11,16 @@
 # When true (default), every rule is enabled unless explicitly disabled below.
 # When false, only rules that have an [rules.MDxxx] section are active.
 default_enabled = true
-
 # Respect .gitignore files when discovering Markdown files. Disable only if
 # you are running mdlint outside a git repository or want to lint ignored files.
 gitignore = true
-
 # Paths and glob patterns to exclude from file discovery. These are merged with
 # any --exclude flags passed on the command line. Useful for excluding generated
 # files, test fixtures, or files that intentionally use non-canonical syntax.
 # exclude = ["docs/generated", "tests/fixtures"]
-
 # When true, ignore all <!-- mdlint-disable --> comments inside files.
 # Useful for enforcing rules with no per-file escape hatches.
 no_inline_config = false
-
 # When true (default), `mdlint check` automatically applies all auto-fixable
 # violations, equivalent to passing --fix on the command line.
 fix = true
