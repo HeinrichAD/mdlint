@@ -14,4 +14,4 @@ cp README.md npm/README.md
 npm --prefix npm version "$VERSION"
 
 cp README.md python/README.md
-uv --directory python version "${UV_DRY_RUN_ARGS[@]}" "$VERSION"
+uv --directory python version ${UV_DRY_RUN_ARGS[@]+"${UV_DRY_RUN_ARGS[@]}"} "$VERSION"
