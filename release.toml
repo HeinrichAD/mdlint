@@ -5,9 +5,9 @@
 # commands are needed in CI — by the time a tag is pushed, every manifest already
 # contains the correct version.
 
-pre-release-commit-message = "Release"
+pre-release-commit-message = "Release {{version}}"
 publish = false
-tag-message = "Release"
+tag-message = "Release {{version}}"
 # designed to run _after_ pre-release-replacements
 pre-release-hook = ["./release.sh"]
 
