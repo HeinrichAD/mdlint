@@ -1,10 +1,12 @@
+// GitLab Code Quality Report
+// https://docs.gitlab.com/ci/testing/code_quality/#code-quality-report-format
+
 use crate::format::Formatter;
 use crate::lint::LintResult;
 use crate::types::FileResult;
-use hex::ToHex;
 use serde::Serialize;
-use sha2::{Digest, Sha256};
 use std::env;
+use std::hash::{DefaultHasher, Hash, Hasher};
 use std::path::PathBuf;
 
 pub struct GitlabFormatter {
@@ -44,23 +46,17 @@ fn file_violations(file_result: &FileResult, path_relative: &str) -> Vec<GitlabV
 }
 
 fn create_fingerprint(input: &str) -> String {
-    let mut hasher = Sha256::new();
-    hasher.update(input.as_bytes());
-    let result = hasher.finalize().to_vec();
-    result.encode_hex::<String>()
+    let mut hasher = DefaultHasher::new();
+    input.hash(&mut hasher);
+    let hash_value = hasher.finish();
+    format!("{:x}", hash_value)
 }
 
 #[derive(Serialize)]
 #[serde(rename_all = "lowercase")]
 enum Severity {
-    #[allow(dead_code)]
-    Info,
     Minor,
     Major,
-    #[allow(dead_code)]
-    Critical,
-    #[allow(dead_code)]
-    Blocker,
 }
 
 #[derive(Serialize)]
